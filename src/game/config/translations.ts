@@ -169,6 +169,7 @@ export const TRANSLATIONS = {
     "Corsair Tower": "Corsair",
     "Miner Station": "Station Minière",
     "Command Node": "Nœud de Commande",
+    "Engineering Dock": "Quai d'Ingénierie",
 
     // Character Screen
     characters: "Personnages",
@@ -189,7 +190,8 @@ export const TRANSLATIONS = {
     tier4Name: "Contrôle Industriel",
     tier4Desc: "Protocoles de fin de partie engagés.",
 
-    // Tower Menu
+    // Auto Upgrade
+    autoUpgrade: "Amélioration Auto",
   }
 };
 
