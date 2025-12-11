@@ -18,6 +18,9 @@ export const AssetPreloader = () => {
       useGLTF.preload(enemy.model);
     });
 
+    // Preload Basic Environment Models
+    useGLTF.preload("/models/environment/platform/basic_platform.glb");
+
     // Preload Rock and Miner Models
     useGLTF.preload(ROCK_CONFIG.model);
     useGLTF.preload(MINER_CONFIG.model);

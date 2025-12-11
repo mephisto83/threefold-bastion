@@ -16,7 +16,7 @@ export const TRANSLATIONS = {
     french: "Français",
 
     // Start Screen
-    title: "Tower Defense 3D",
+    title: "Threefold Bastion",
     startGame: "Start Game",
     viewCharacters: "View Characters",
 
@@ -113,7 +113,7 @@ export const TRANSLATIONS = {
     french: "Français",
 
     // Start Screen
-    title: "Tower Defense 3D",
+    title: "Threefold Bastion",
     startGame: "Commencer",
     viewCharacters: "Voir Personnages",
 

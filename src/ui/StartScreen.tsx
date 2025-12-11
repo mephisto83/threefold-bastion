@@ -22,7 +22,17 @@ export const StartScreen: React.FC = () => {
       zIndex: 10,
       gap: '20px'
     }}>
-      <h1 style={{ fontSize: '48px', marginBottom: '40px', textShadow: '0 0 10px #00ffff' }}>{t('title')}</h1>
+      <img 
+        src="/images/title/title_car.jpeg" 
+        alt={t('title')}
+        style={{ 
+          maxWidth: '800px',
+          width: '90%',
+          marginBottom: '40px',
+          boxShadow: '0 0 20px rgba(0, 255, 255, 0.3)',
+          borderRadius: '10px'
+        }} 
+      />
       
       <button 
         onClick={startGame}

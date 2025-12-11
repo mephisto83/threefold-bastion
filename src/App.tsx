@@ -12,12 +12,14 @@ import { SettingsScreen } from './ui/SettingsScreen';
 import { AssetPreloader } from './game/utils/AssetPreloader';
 import { AudioSystem } from './game/systems/AudioSystem';
 import { useGameState } from './state/gameState';
+import { LoadingScreen } from './ui/LoadingScreen';
 
 function App() {
   const { status } = useGameState();
 
   return (
     <div className="App">
+      <LoadingScreen />
       <AssetPreloader />
       <AudioSystem />
       <MusicPlayer />
