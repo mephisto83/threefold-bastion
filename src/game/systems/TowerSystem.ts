@@ -303,6 +303,7 @@ export const TowerSystem = () => {
             position: tower.position.clone().add(new Vector3(0, 2, 0)), // Fire from top
             targetId: targetId,
             damage: damage,
+            damageType: config.damageType,
             speed: 10, // Projectile speed
             startPosition: tower.position.clone().add(new Vector3(0, 2, 0)),
             faction: 'player'

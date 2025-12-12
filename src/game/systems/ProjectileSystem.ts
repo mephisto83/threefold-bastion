@@ -68,57 +68,113 @@ export const ProjectileSystem = () => {
             scale: 1
         });
 
-        const newHealth = (target.health || 0) - projectile.damage;
-        
-        if (newHealth <= 0) {
-          // Play random explosion sound
-          const randomSound = EXPLOSION_SOUNDS[Math.floor(Math.random() * EXPLOSION_SOUNDS.length)];
-          soundManager.play(randomSound, 0.3);
-          
-          // Big death explosion
-          addEffect({
-            id: uuidv4(),
-            type: 'explosion_3',
-            position: target.position.clone(),
-            startTime: now,
-            scale: 3
-          });
+        // Damage Calculation with Shields
+        let finalDamage = projectile.damage;
+        let shieldDamage = 0;
+        let healthDamage = 0;
 
-          if (targetType === 'enemy') {
-            removeEnemy(target.id);
-            // @ts-ignore
-            const reward = ENEMIES[target.type].reward;
-            addMoney(reward);
-          } else if (targetType === 'miner') {
-            removeMiner(target.id);
-          } else if (targetType === 'tower') {
-            // removeTower(target.id); // Need to implement removeTower in gameState
-            // For now, let's just disable it or remove it from the array manually if removeTower isn't exposed
-            // Actually, let's check gameState.ts again, I think I saw removeTower? No, I didn't.
-            // I'll need to add removeTower to gameState.
-             useGameState.setState(state => ({
-              towers: state.towers.filter(t => t.id !== target.id)
-            }));
-          }
+        if (targetType === 'enemy') {
+            // Enemy Damage Logic (Shields + Health)
+            const damageType = projectile.damageType || 'kinetic';
+            
+            if (target.shield > 0) {
+                // Energy weapons deal 200% damage to shields, Kinetic deals 50%
+                let shieldMultiplier = 1.0;
+                if (damageType === 'energy') shieldMultiplier = 2.0;
+                if (damageType === 'kinetic') shieldMultiplier = 0.5;
+
+                const effectiveShieldDamage = finalDamage * shieldMultiplier;
+                
+                if (target.shield >= effectiveShieldDamage) {
+                    shieldDamage = effectiveShieldDamage;
+                    healthDamage = 0;
+                } else {
+                    shieldDamage = target.shield;
+                    // Remaining damage spills over to health
+                    const remainingRawDamage = (effectiveShieldDamage - target.shield) / shieldMultiplier;
+                    
+                    let healthMultiplier = 1.0;
+                    if (damageType === 'kinetic') healthMultiplier = 1.5;
+                    if (damageType === 'energy') healthMultiplier = 0.5;
+
+                    healthDamage = remainingRawDamage * healthMultiplier;
+                }
+            } else {
+                // No shield, direct health damage
+                let healthMultiplier = 1.0;
+                if (damageType === 'kinetic') healthMultiplier = 1.5;
+                if (damageType === 'energy') healthMultiplier = 0.5;
+                
+                healthDamage = finalDamage * healthMultiplier;
+            }
+
+            const newShield = Math.max(0, target.shield - shieldDamage);
+            const newHealth = Math.max(0, target.health - healthDamage);
+            
+            updateEnemy(target.id, { 
+                shield: newShield,
+                health: newHealth
+            });
+
+            if (newHealth <= 0) {
+                // Death logic
+                const randomSound = EXPLOSION_SOUNDS[Math.floor(Math.random() * EXPLOSION_SOUNDS.length)];
+                soundManager.play(randomSound, 0.3);
+                
+                addEffect({
+                    id: uuidv4(),
+                    type: 'explosion_3',
+                    position: target.position.clone(),
+                    startTime: now,
+                    scale: 3
+                });
+
+                removeEnemy(target.id);
+                // @ts-ignore
+                const reward = ENEMIES[target.type].reward;
+                addMoney(reward);
+            }
+
         } else {
-          if (targetType === 'enemy') {
-            updateEnemy(target.id, { health: newHealth });
-          } else if (targetType === 'miner') {
-            updateMiner(target.id, { health: newHealth });
-          } else if (targetType === 'tower') {
-            updateTower(target.id, { health: newHealth });
-
-            // Play under attack sound (rarely)
-            if (Math.random() < 0.1) {
-                const tower = towers.find(t => t.id === target.id);
-                if (tower) {
-                    const charId = tower.assignedCharacter || TOWERS[tower.type].character;
-                    if (charId && CHARACTERS[charId] && CHARACTERS[charId].audio?.[language]?.under_attack_pressure) {
-                        soundManager.play(CHARACTERS[charId].audio[language].under_attack_pressure, 0.5);
+            // Standard logic for non-enemies (Miners/Towers don't have shields yet)
+            const newHealth = (target.health || 0) - projectile.damage;
+            
+            if (targetType === 'miner') updateMiner(target.id, { health: newHealth });
+            if (targetType === 'tower') {
+                updateTower(target.id, { health: newHealth });
+                
+                // Play under attack sound (rarely)
+                if (Math.random() < 0.1) {
+                    const tower = towers.find(t => t.id === target.id);
+                    if (tower) {
+                        const charId = tower.assignedCharacter || TOWERS[tower.type].character;
+                        if (charId && CHARACTERS[charId] && CHARACTERS[charId].audio?.[language]?.under_attack_pressure) {
+                            soundManager.play(CHARACTERS[charId].audio[language].under_attack_pressure, 0.5);
+                        }
                     }
                 }
             }
-          }
+
+            if (newHealth <= 0) {
+                // Death logic
+                const randomSound = EXPLOSION_SOUNDS[Math.floor(Math.random() * EXPLOSION_SOUNDS.length)];
+                soundManager.play(randomSound, 0.3);
+                
+                addEffect({
+                    id: uuidv4(),
+                    type: 'explosion_3',
+                    position: target.position.clone(),
+                    startTime: now,
+                    scale: 3
+                });
+
+                if (targetType === 'miner') removeMiner(target.id);
+                if (targetType === 'tower') {
+                     useGameState.setState(state => ({
+                        towers: state.towers.filter(t => t.id !== target.id)
+                    }));
+                }
+            }
         }
       } else {
         // Move

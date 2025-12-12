@@ -26,6 +26,8 @@ export interface EnemyEntity {
   progress: number; // 0 to 1 along the path
   health: number;
   maxHealth: number;
+  shield: number;
+  maxShield: number;
   speed: number;
   scale?: number;
   frozen?: boolean;
@@ -101,6 +103,7 @@ export interface ProjectileEntity {
   position: Vector3;
   targetId: string;
   damage: number;
+  damageType?: 'kinetic' | 'energy';
   speed: number;
   startPosition: Vector3; // For lerping if needed
   faction: 'player' | 'enemy';

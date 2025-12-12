@@ -9,6 +9,7 @@ export interface TowerStats {
     cost?: number; // Cost to upgrade TO this level
     model?: string;
     moveSpeed?: number;
+    damageType?: 'kinetic' | 'energy'; // New damage type
     // Miner specific stats
     minerSpeed?: number;
     minerCapacity?: number;
@@ -21,7 +22,7 @@ export const TOWERS = {
     basic: {
         name: "Basic Tower",
         character: "adam",
-        model: "/models/towers/cannon/basic.glb",
+        model: "/models/towers/interceptorfighter/interceptor_fighter.glb",
         range: 8,
         damage: 10,
         fireRate: 1,
@@ -34,12 +35,13 @@ export const TOWERS = {
         health: 200,
         upgradeCost: 150,
         moveSpeed: 2,
+        damageType: 'kinetic',
         upgrades: [] as TowerStats[]
     },
     sniper: {
         name: "Sniper Tower",
         character: "jordan_porter",
-        model: "/models/towers/cannon/eye_cannon.glb",
+        model: "/models/towers/gunship/gunship.glb",
         range: 15,
         damage: 40,
         fireRate: 0.5,
@@ -52,29 +54,32 @@ export const TOWERS = {
         health: 150,
         upgradeCost: 300,
         moveSpeed: 3,
+        damageType: 'kinetic',
         upgrades: [
             {
                 range: 20,
                 damage: 80,
                 fireRate: 0.6,
-                model: "/models/towers/cannon/cannon_lv2.glb",
+                model: "/models/towers/gunship/gunship.glb",
                 cost: 300,
-                moveSpeed: 15
+                moveSpeed: 15,
+                damageType: 'kinetic'
             },
             {
                 range: 25,
                 damage: 150,
                 fireRate: 0.7,
-                model: "/models/towers/cannon/cannon_lv2.glb", // Placeholder for lv3
+                model: "/models/towers/gunship/gunship.glb", // Placeholder for lv3
                 cost: 500,
-                moveSpeed: 18
+                moveSpeed: 18,
+                damageType: 'kinetic'
             }
         ] as TowerStats[]
     },
     cannon: {
         name: "Cannon Tower",
         character: "adam",
-        model: "/models/towers/cannon/orbital_cannon.glb",
+        model: "/models/towers/cannon/cannon_ship.glb",
         range: 10,
         damage: 50,
         fireRate: 1.5,
@@ -87,6 +92,7 @@ export const TOWERS = {
         health: 300,
         upgradeCost: 250,
         moveSpeed: 2,
+        damageType: 'energy',
         upgrades: [] as TowerStats[]
     },
     corsair: {
@@ -105,47 +111,53 @@ export const TOWERS = {
         health: 250,
         upgradeCost: 280,
         moveSpeed: 4,
+        damageType: 'energy',
         upgrades: [{
             range: 20,
             damage: 80,
             fireRate: 0.6,
             model: "/models/towers/corsairs/corsairs_2.glb",
             cost: 300,
-            moveSpeed: 4
+            moveSpeed: 4,
+            damageType: 'energy'
         }, {
             range: 20,
             damage: 80,
             fireRate: 0.7,
             model: "/models/towers/corsairs/corsairs_3.glb",
             cost: 400,
-            moveSpeed: 5
+            moveSpeed: 5,
+            damageType: 'energy'
         }, {
             range: 20,
             damage: 90,
             fireRate: 0.9,
             model: "/models/towers/corsairs/corsairs_4.glb",
             cost: 500,
-            moveSpeed: 6
+            moveSpeed: 6,
+            damageType: 'energy'
         }, {
             range: 20,
             damage: 100,
             fireRate: 1.0,
             model: "/models/towers/corsairs/corsairs_5.glb",
             cost: 700,
-            moveSpeed: 7
+            moveSpeed: 7,
+            damageType: 'energy'
         }, {
             range: 20,
             damage: 180,
             fireRate: 1.1,
             model: "/models/towers/corsairs/corsairs_6.glb",
             cost: 1000,
-            moveSpeed: 8
+            moveSpeed: 8,
+            damageType: 'energy'
         }] as TowerStats[]
     },
     miner_station: {
         name: "Miner Station",
         character: "adam",
-        model: "/models/towers/stations/station_lv1.glb", // Placeholder
+        model: "/models/towers/heavycarriership/heavy_carrier_ship.glb", // Placeholder
         range: 30, // Radius for miners
         damage: 0,
         fireRate: 0,
@@ -158,6 +170,7 @@ export const TOWERS = {
         health: 500,
         upgradeCost: 500,
         moveSpeed: 1,
+        damageType: 'kinetic',
         minerSpeed: 4,
         minerCapacity: 150,
         minerMiningRate: 15,
@@ -168,43 +181,43 @@ export const TOWERS = {
                 damage: 0,
                 fireRate: 0,
                 cost: 500,
-                model: "/models/towers/stations/station_2.glb",
+                model: "/models/towers/heavycarriership/heavy_carrier_ship.glb",
                 minerSpeed: 5,
                 minerCapacity: 200,
                 minerMiningRate: 20,
                 minerHealth: 300,
-                minerModel: "/models/towers/miners/miner_2.glb"
+                minerModel: "/models/towers/miners/miner.glb"
             },
             {
                 range: 40,
                 damage: 0,
                 fireRate: 0,
                 cost: 800,
-                model: "/models/towers/stations/station_2.glb",
+                model: "/models/towers/heavycarriership/heavy_carrier_ship.glb",
                 minerSpeed: 6,
                 minerCapacity: 350,
                 minerMiningRate: 40,
                 minerHealth: 500,
-                minerModel: "/models/towers/miners/miner_3.glb"
+                minerModel: "/models/towers/miners/miner.glb"
             },
             {
                 range: 45,
                 damage: 0,
                 fireRate: 0,
                 cost: 800,
-                model: "/models/towers/stations/station_2.glb",
+                model: "/models/towers/heavycarriership/heavy_carrier_ship.glb",
                 minerSpeed: 7,
                 minerCapacity: 400,
                 minerMiningRate: 45,
                 minerHealth: 600,
-                minerModel: "/models/towers/miners/miner_4.glb"
+                minerModel: "/models/towers/miners/miner.glb"
             }
         ] as TowerStats[]
     },
     command_node: {
         name: "Command Node",
         character: "alexander_porter",
-        model: "/models/towers/command/command_1.glb", // Placeholder
+        model: "/models/towers/command/command.glb", // Placeholder
         range: 15, // Buff radius
         damage: 0,
         fireRate: .1,
@@ -217,6 +230,7 @@ export const TOWERS = {
         health: 400,
         upgradeCost: 400,
         moveSpeed: 2,
+        damageType: 'kinetic',
         upgrades: [
             {
                 range: 20,
@@ -252,6 +266,7 @@ export const TOWERS = {
         health: 400,
         upgradeCost: 600,
         moveSpeed: 1,
+        damageType: 'kinetic',
         upgrades: [] as TowerStats[]
     }
 } as const;
@@ -266,7 +281,7 @@ export const MINER_CONFIG = {
     speed: 1, // Slightly faster
     maxCapacity: 150,
     miningRate: 15, // Faster mining
-    model: "/models/towers/miners/miner_1.glb", // Placeholder
+    model: "/models/towers/miners/miner.glb", // Placeholder
     health: 200,
     upgrades: [
         {
@@ -274,21 +289,21 @@ export const MINER_CONFIG = {
             maxCapacity: 200,
             miningRate: 20,
             health: 300,
-            model: "/models/towers/miners/miner_2.glb"
+            model: "/models/towers/miners/miner.glb"
         },
         {
             speed: 3,
             maxCapacity: 300,
             miningRate: 30,
             health: 400,
-            model: "/models/towers/miners/miner_3.glb"
+            model: "/models/towers/miners/miner.glb"
         },
         {
             speed: 4,
             maxCapacity: 450,
             miningRate: 45,
             health: 600,
-            model: "/models/towers/miners/miner_4.glb"
+            model: "/models/towers/miners/miner.glb"
         }
     ]
 };
@@ -307,6 +322,7 @@ export const ENEMIES = {
         model: "/models/enemies/bugs/bug_1.glb",
         speed: 10,
         health: 150,
+        shield: 50,
         reward: 10,
         color: "red",
         damage: 5,
@@ -319,6 +335,7 @@ export const ENEMIES = {
         model: "/models/enemies/bugs/bug_2.glb",
         speed: 6,
         health: 350,
+        shield: 100,
         reward: 50,
         color: "blue",
         damage: 20,
@@ -331,6 +348,7 @@ export const ENEMIES = {
         model: "/models/enemies/bugs/bug_3.glb",
         speed: 8,
         health: 550,
+        shield: 200,
         reward: 25,
         color: "darkred",
         damage: 15,
@@ -343,6 +361,7 @@ export const ENEMIES = {
         model: "/models/enemies/bugs/bug_4.glb",
         speed: 12,
         health: 120,
+        shield: 30,
         reward: 15,
         color: "purple",
         damage: 8,
@@ -355,6 +374,7 @@ export const ENEMIES = {
         model: "/models/enemies/bugs/bug_5.glb",
         speed: 14,
         health: 180,
+        shield: 60,
         reward: 30,
         color: "cyan",
         damage: 12,
@@ -367,6 +387,7 @@ export const ENEMIES = {
         model: "/models/enemies/bugs/bug_6.glb",
         speed: 9,
         health: 400,
+        shield: 150,
         reward: 40,
         color: "green",
         damage: 25,

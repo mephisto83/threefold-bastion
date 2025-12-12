@@ -58,6 +58,7 @@ export const WaveSystem = () => {
         const scaleMultiplier = Math.min(40.0, 1 + (wave - 1) * 0.1);
 
         const maxHealth = Math.floor(enemyConfig.health * healthMultiplier);
+        const maxShield = Math.floor((enemyConfig.shield || 0) * healthMultiplier);
 
         spawnEnemy({
           id: uuidv4(),
@@ -68,6 +69,8 @@ export const WaveSystem = () => {
           progress: 0,
           health: maxHealth,
           maxHealth: maxHealth,
+          shield: maxShield,
+          maxShield: maxShield,
           speed: enemyConfig.speed,
           scale: scaleMultiplier
         });

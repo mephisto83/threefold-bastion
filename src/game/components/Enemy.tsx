@@ -25,10 +25,21 @@ export const Enemy: React.FC<EnemyProps> = ({ enemy }) => {
     <group position={enemy.position} rotation={rotation} scale={[scale, scale, scale]}>
       <EnemyModel model={config.model} />
       
-      {/* Health Bar - Scale inversely so it stays same size relative to screen? Or scale with enemy? 
-          Usually scaling with enemy is fine, but maybe we want it readable. 
-          If we scale the group, the health bar scales too. That's probably what we want for "bigger enemies".
-      */}
+      {/* Shield Bar */}
+      {enemy.maxShield > 0 && (
+        <>
+          <mesh position={[0, 2.2, 0]}>
+            <planeGeometry args={[1, 0.1]} />
+            <meshBasicMaterial color="gray" transparent opacity={0.5} />
+          </mesh>
+          <mesh position={[-(1 - enemy.shield / enemy.maxShield) / 2, 2.2, 0.01]}>
+            <planeGeometry args={[enemy.shield / enemy.maxShield, 0.1]} />
+            <meshBasicMaterial color="#00ffff" />
+          </mesh>
+        </>
+      )}
+
+      {/* Health Bar */}
       <mesh position={[0, 2, 0]}>
         <planeGeometry args={[1, 0.1]} />
         <meshBasicMaterial color="red" />
