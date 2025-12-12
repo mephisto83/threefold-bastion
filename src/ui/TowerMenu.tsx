@@ -3,13 +3,13 @@ import { useGameState } from '../state/gameState';
 import { TOWERS, TowerType } from '../game/config/gameConfig';
 import { TIER_GATES } from '../game/config/progressionConfig';
 import { useTranslation } from './hooks/useTranslation';
+import { TowerCard, UpgradeButton } from './CyberUI';
 
 export const TowerMenu: React.FC = () => {
   const { selectTower, selectedTower, money, towerBlueprints, upgradeTowerBlueprint, spendMoney, currentTier } = useGameState();
   const { t } = useTranslation();
 
-  const handleTechUpgrade = (e: React.MouseEvent, type: TowerType) => {
-    e.stopPropagation();
+  const handleTechUpgrade = (type: TowerType) => {
     const config = TOWERS[type];
     const currentLevel = towerBlueprints[type];
     // Tech upgrade cost is higher: Base Upgrade Cost * Level * 2
@@ -97,7 +97,10 @@ export const TowerMenu: React.FC = () => {
         background: 'rgba(0,0,0,0.5)',
         padding: '10px',
         borderRadius: '10px',
-        pointerEvents: 'all'
+        pointerEvents: 'all',
+        overflowX: 'auto',
+        maxWidth: '100vw',
+        justifyContent: 'center'
       }}>
         {(Object.keys(TOWERS) as TowerType[]).map((type) => {
           const config = TOWERS[type];
@@ -109,65 +112,36 @@ export const TowerMenu: React.FC = () => {
           const isUnlocked = unlockedTowers.has(type);
 
           if (!isUnlocked) {
-             // Render locked placeholder or nothing?
-             // User said: "Show next-tier holograms" or "Tooltip listing missing towers".
-             // For now, let's render a locked button.
              return (
-               <div key={type} style={{ display: 'flex', flexDirection: 'column', gap: '5px', opacity: 0.5, filter: 'grayscale(1)' }}>
-                  <button
-                    style={{
-                      padding: '10px',
-                      background: '#333',
-                      border: '1px solid #555',
-                      borderRadius: '5px',
-                      cursor: 'not-allowed',
-                      minWidth: '120px',
-                      color: '#888'
-                    }}
-                    disabled
-                  >
-                    <div style={{ fontWeight: 'bold' }}>{t('locked')}</div>
-                    <div>{t('requiresTier', { tier: TIER_GATES.find(g => g.unlocks.includes(type))?.tier || '?' })}</div>
-                  </button>
-               </div>
+               <TowerCard
+                  key={type}
+                  name={t(config.name)}
+                  cost={config.cost}
+                  techLevel={level}
+                  isLocked={true}
+               />
              );
           }
 
           return (
-            <div key={type} style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <button
-                onClick={() => selectTower(isSelected ? null : type)}
-                style={{
-                  padding: '10px',
-                  background: isSelected ? '#4CAF50' : canAfford ? '#fff' : '#ccc',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: canAfford ? 'pointer' : 'not-allowed',
-                  opacity: canAfford ? 1 : 0.5,
-                  minWidth: '120px'
-                }}
-                disabled={!canAfford && !isSelected}
-              >
-                <div style={{ fontWeight: 'bold' }}>{t(config.name)}</div>
-                <div>${config.cost} ({t('techLvl', { level })})</div>
-              </button>
-              
-              <button
-                onClick={(e) => handleTechUpgrade(e, type)}
-                style={{
-                  padding: '5px',
-                  background: canAffordUpgrade ? '#FF9800' : '#555',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: canAffordUpgrade ? 'pointer' : 'not-allowed',
-                  fontSize: '12px'
-                }}
-                disabled={!canAffordUpgrade}
-              >
-                {t('upgradeTech', { cost: techUpgradeCost })}
-              </button>
-            </div>
+            <TowerCard
+              key={type}
+              name={t(config.name)}
+              cost={config.cost}
+              techLevel={level}
+              isSelected={isSelected}
+              canAfford={canAfford}
+              onClick={() => selectTower(isSelected ? null : type)}
+            >
+              <div style={{ marginTop: '10px' }}>
+                <UpgradeButton
+                  cost={techUpgradeCost}
+                  onUpgrade={() => handleTechUpgrade(type)}
+                  canAfford={canAffordUpgrade}
+                  variant="orange"
+                />
+              </div>
+            </TowerCard>
           );
         })}
       </div>

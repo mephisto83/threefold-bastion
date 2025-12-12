@@ -397,7 +397,7 @@ export const getWaveConfig = (wave: number) => {
 
     // Scale difficulty
     // Increase count more slowly to improve performance
-    const count = Math.min(20,   5 + Math.floor(wave * 0.2)); 
+    const count = Math.min(15,   5 + Math.floor(wave * 0.2)); 
    
     const interval = Math.max(0.5, 2 - (wave * 0.05)); // Decrease interval slightly, min 0.5s
 
