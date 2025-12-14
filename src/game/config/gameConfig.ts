@@ -238,7 +238,7 @@ export const TOWERS = {
                 fireRate: 1,
                 health: 600,
                 cost: 600,
-                model: "/models/towers/command/command_2.glb"
+                model: "/models/towers/command/command.glb"
             },
             {
                 range: 25,
@@ -246,14 +246,14 @@ export const TOWERS = {
                 fireRate: 2,
                 health: 800,
                 cost: 800,
-                model: "/models/towers/stations/station_2.glb"
+                model: "/models/towers/command/command.glb"
             }
         ] as TowerStats[]
     },
     engineering_station: {
         name: "Engineering Dock",
         character: "bob",
-        model: "/models/towers/engineering/engineering_1.glb",
+        model: "/models/towers/engineering/engineering.glb",
         range: 40, // Operational radius
         damage: 0,
         fireRate: 0,

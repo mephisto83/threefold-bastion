@@ -86,22 +86,23 @@ export const MusicPlayer = () => {
       right: '50%',
       transform: 'translateX(50%)',
       background: 'rgba(0, 0, 0, 0.8)',
-      padding: '15px',
-      borderRadius: '12px',
+      padding: '10px 20px',
+      borderRadius: '30px',
       color: 'white',
       display: 'flex',
-      flexDirection: 'column',
-      gap: '10px',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: '15px',
       zIndex: 1000,
       border: '1px solid rgba(255, 255, 255, 0.2)',
       backdropFilter: 'blur(5px)',
-      width: '200px'
+      width: 'auto',
+      minWidth: 'fit-content'
     }}>
       <div style={{ 
         display: 'flex', 
         alignItems: 'center', 
-        justifyContent: 'space-between',
-        marginBottom: '5px'
+        gap: '8px'
       }}>
         <span style={{ 
           fontSize: '14px', 
@@ -109,11 +110,11 @@ export const MusicPlayer = () => {
           color: '#4a9eff'
         }}>{t('musicPlayer')}</span>
         <span style={{ fontSize: '10px', color: '#aaa' }}>
-          {currentTrackIndex + 1} / {TRACKS.length}
+          ({currentTrackIndex + 1}/{TRACKS.length})
         </span>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <button 
           onClick={togglePlay} 
           style={{ 
@@ -121,9 +122,9 @@ export const MusicPlayer = () => {
             background: 'rgba(255, 255, 255, 0.1)', 
             border: '1px solid rgba(255, 255, 255, 0.2)', 
             color: 'white', 
-            fontSize: '18px',
-            width: '40px',
-            height: '40px',
+            fontSize: '14px',
+            width: '32px',
+            height: '32px',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
@@ -142,9 +143,9 @@ export const MusicPlayer = () => {
             background: 'rgba(255, 255, 255, 0.1)', 
             border: '1px solid rgba(255, 255, 255, 0.2)', 
             color: 'white', 
-            fontSize: '18px',
-            width: '40px',
-            height: '40px',
+            fontSize: '14px',
+            width: '32px',
+            height: '32px',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
@@ -168,12 +169,11 @@ export const MusicPlayer = () => {
           value={volume} 
           onChange={(e) => setVolume(parseFloat(e.target.value))}
           style={{ 
-            width: '100%',
+            width: '60px',
             accentColor: '#4a9eff',
             height: '4px'
           }}
         />
-        <span style={{ fontSize: '12px' }}>🔊</span>
       </div>
 
       <audio 

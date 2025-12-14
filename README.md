@@ -12,6 +12,22 @@ A 3D Tower Defense game built with React, TypeScript, and React Three Fiber. Def
 *   **Internationalization**: Full support for English and French languages.
 *   **Rich Media**: Integrated audio system for music/sfx and video player for character interactions.
 
+## 🕹️ How to Play
+
+1.  **Objective**: Prevent enemies from reaching your base. You lose if your base health reaches zero.
+2.  **Controls**:
+    *   **Select Tower**: Click on a tower icon in the bottom menu.
+    *   **Place Tower**: Click on the ground to place the selected tower.
+    *   **Inspect/Upgrade**: Click on a placed tower to see its stats and upgrade options.
+3.  **Combat Mechanics**:
+    *   **Shields (Blue Bar)**: Vulnerable to **Energy** damage (Cyan projectiles).
+    *   **Health (Green Bar)**: Vulnerable to **Kinetic** damage (Gold projectiles).
+    *   **Strategy**: Use Energy towers (Cannon, Corsair) to strip shields, then Kinetic towers (Basic, Sniper) to destroy the hull.
+4.  **Economy**:
+    *   Earn money by defeating enemies.
+    *   Build **Miner Stations** to gather resources from rocks.
+    *   Invest in **Command Nodes** to buff nearby towers.
+
 ## 🛠 Tech Stack
 
 *   **Core**: [React](https://reactjs.org/), [TypeScript](https://www.typescriptlang.org/), [Vite](https://vitejs.dev/)

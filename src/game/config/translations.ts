@@ -19,6 +19,21 @@ export const TRANSLATIONS = {
     title: "Threefold Bastion",
     startGame: "Start Game",
     viewCharacters: "View Characters",
+    howToPlay: "How to Play",
+    skip: "Skip",
+
+    // Instructions
+    instructionsTitle: "How to Play",
+    instructionsObjective: "Defend your base from waves of enemies.",
+    instructionsControls: "Controls: Click to select towers. Click ground to place.",
+    instructionsMechanics: "Mechanics:",
+    instructionsShields: "• Blue Bar = Shield (Weak to Energy)",
+    instructionsHealth: "• Green Bar = Health (Weak to Kinetic)",
+    instructionsEnergy: "• Use Energy Towers (Cyan) to strip shields.",
+    instructionsKinetic: "• Use Kinetic Towers (Gold) to finish them off.",
+    instructionsEconomy: "• Kill enemies to earn money.",
+    instructionsUpgrades: "• Click towers to upgrade them.",
+    close: "Close",
 
     // Game Over
     gameOver: "Game Over",
@@ -116,6 +131,21 @@ export const TRANSLATIONS = {
     title: "Threefold Bastion",
     startGame: "Commencer",
     viewCharacters: "Voir Personnages",
+    howToPlay: "Comment Jouer",
+    skip: "Passer",
+
+    // Instructions
+    instructionsTitle: "Comment Jouer",
+    instructionsObjective: "Défendez votre base contre les vagues d'ennemis.",
+    instructionsControls: "Contrôles : Cliquez pour sélectionner. Cliquez au sol pour placer.",
+    instructionsMechanics: "Mécaniques :",
+    instructionsShields: "• Barre Bleue = Bouclier (Faible vs Énergie)",
+    instructionsHealth: "• Barre Verte = Santé (Faible vs Cinétique)",
+    instructionsEnergy: "• Utilisez les Tours Énergie (Cyan) pour les boucliers.",
+    instructionsKinetic: "• Utilisez les Tours Cinétique (Or) pour les finir.",
+    instructionsEconomy: "• Tuez les ennemis pour gagner de l'argent.",
+    instructionsUpgrades: "• Cliquez sur les tours pour les améliorer.",
+    close: "Fermer",
 
     // Game Over
     gameOver: "Partie Terminée",

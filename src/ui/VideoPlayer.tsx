@@ -26,10 +26,22 @@ export const VideoPlayer: React.FC = () => {
     }
   }, [effectiveVideo?.url]);
 
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  };
+
   if (!effectiveVideo || !effectiveVideo.url) return null;
 
   return (
-    <div style={{
+    <div 
+      onClick={togglePlay}
+      style={{
       position: 'absolute',
       bottom: '20px',
       left: '20px',
@@ -40,7 +52,8 @@ export const VideoPlayer: React.FC = () => {
       // Let's do a cool tech border.
       background: 'black',
       zIndex: 1000,
-      pointerEvents: 'none',
+      pointerEvents: 'auto',
+      cursor: 'pointer',
       overflow: 'hidden',
       boxShadow: '0 0 20px rgba(0, 255, 255, 0.3)'
     }}>

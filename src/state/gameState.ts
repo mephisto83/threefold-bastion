@@ -5,7 +5,7 @@ import { TIER_GATES } from '../game/config/progressionConfig';
 import { generatePaths } from '../game/utils/pathGenerator';
 import { soundManager } from '../game/utils/SoundManager';
 
-export type GameStatus = 'start' | 'playing' | 'gameover' | 'victory' | 'wave_intermission' | 'characters';
+export type GameStatus = 'start' | 'playing' | 'gameover' | 'victory' | 'wave_intermission' | 'characters' | 'instructions' | 'family_tree';
 
 export type Language = 'en' | 'fr';
 
@@ -139,8 +139,10 @@ interface GameState {
   
   // Settings
   isSettingsOpen: boolean;
+  isLoading: boolean;
   language: Language;
   toggleSettings: () => void;
+  setLoading: (loading: boolean) => void;
   setLanguage: (lang: Language) => void;
 
   // Actions
@@ -156,6 +158,8 @@ interface GameState {
   checkTierUnlock: () => void;
 
   showCharacters: () => void;
+  showInstructions: () => void;
+  showFamilyTree: () => void;
   showStartScreen: () => void;
 
   startGame: () => void;
@@ -226,8 +230,10 @@ export const useGameState = create<GameState>((set, get) => ({
   activeVideo: null,
 
   isSettingsOpen: false,
+  isLoading: true,
   language: 'en',
   toggleSettings: () => set((state) => ({ isSettingsOpen: !state.isSettingsOpen })),
+  setLoading: (loading) => set({ isLoading: loading }),
   setLanguage: (lang) => set({ language: lang }),
 
   playVideo: (url, loop, priority) => set((state) => {
@@ -298,6 +304,8 @@ export const useGameState = create<GameState>((set, get) => ({
   },
 
   showCharacters: () => set({ status: 'characters' }),
+  showInstructions: () => set({ status: 'instructions' }),
+  showFamilyTree: () => set({ status: 'family_tree' }),
   showStartScreen: () => set({ status: 'start' }),
 
   startGame: () => {

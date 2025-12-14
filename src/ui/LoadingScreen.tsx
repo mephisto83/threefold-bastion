@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useProgress } from '@react-three/drei';
+import { useGameState } from '../state/gameState';
 
 export const LoadingScreen: React.FC = () => {
   const { progress, active } = useProgress();
   const [visible, setVisible] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
+  const { setLoading } = useGameState();
 
   useEffect(() => {
     if (progress === 100 && !active) {
@@ -12,11 +14,14 @@ export const LoadingScreen: React.FC = () => {
       const timer = setTimeout(() => {
         setFadeOut(true);
         // Remove from DOM after fade out animation
-        setTimeout(() => setVisible(false), 500);
+        setTimeout(() => {
+          setVisible(false);
+          setLoading(false);
+        }, 500);
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [progress, active]);
+  }, [progress, active, setLoading]);
 
   if (!visible) return null;
 

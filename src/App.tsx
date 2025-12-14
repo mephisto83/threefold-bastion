@@ -5,6 +5,8 @@ import { TowerDetails } from './ui/TowerDetails';
 import { VideoPlayer } from './ui/VideoPlayer';
 import { StartScreen } from './ui/StartScreen';
 import { CharacterScreen } from './ui/CharacterScreen';
+import { InstructionsScreen } from './ui/InstructionsScreen';
+import { FamilyTreeScreen } from './ui/FamilyTreeScreen';
 import { WaveIntermissionScreen } from './ui/WaveIntermissionScreen';
 import { GameOverScreen } from './ui/GameOverScreen';
 import { MusicPlayer } from './ui/MusicPlayer';
@@ -27,6 +29,8 @@ function App() {
       
       {status === 'start' && <StartScreen />}
       {status === 'characters' && <CharacterScreen />}
+      {status === 'instructions' && <InstructionsScreen />}
+      {status === 'family_tree' && <FamilyTreeScreen />}
       {status === 'wave_intermission' && (
         <>
           <HUD />
