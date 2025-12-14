@@ -463,7 +463,7 @@ function createForceSim(args: {
     minDist,
     cellSize,
     repelRadius: cellSize * 2.2,
-    repelStrength: 4800,
+    repelStrength: 5800,
     springK: 0.06,
     spouseSpringK: 0.12,
     springRest: cellSize * 1.05,
