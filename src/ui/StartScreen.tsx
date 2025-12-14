@@ -8,7 +8,7 @@ const INTRO_VIDEOS = {
 };
 
 export const StartScreen: React.FC = () => {
-  const { startGame, showCharacters, showInstructions, showFamilyTree, language, setLanguage, isLoading } = useGameState();
+  const { startGame, showCharacters, showInstructions, showFamilyTree, showTowerShowcase, language, setLanguage, isLoading } = useGameState();
   const { t } = useTranslation();
   const [showIntro, setShowIntro] = useState(true);
 
@@ -208,6 +208,31 @@ export const StartScreen: React.FC = () => {
         }}
       >
         Family Tree
+      </button>
+
+      <button 
+        onClick={showTowerShowcase}
+        style={{
+          padding: '15px 40px',
+          fontSize: '20px',
+          cursor: 'pointer',
+          background: 'transparent',
+          color: 'white',
+          border: '2px solid #00ffff',
+          borderRadius: '5px',
+          minWidth: '300px',
+          transition: 'background 0.2s'
+        }}
+        onMouseOver={(e) => {
+          e.currentTarget.style.background = 'rgba(0, 255, 255, 0.1)';
+          e.currentTarget.style.transform = 'scale(1.05)';
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.background = 'transparent';
+          e.currentTarget.style.transform = 'scale(1)';
+        }}
+      >
+        Towers
       </button>
     </div>
   );

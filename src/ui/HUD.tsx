@@ -39,7 +39,7 @@ export const HUD: React.FC = () => {
         style={{
           position: 'absolute',
           bottom: 20,
-          left: 20,
+          right: 20,
           background: 'rgba(0, 0, 0, 0.6)',
           border: '2px solid rgba(255, 255, 255, 0.3)',
           borderRadius: '50%',

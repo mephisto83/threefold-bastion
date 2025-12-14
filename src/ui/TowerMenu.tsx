@@ -133,14 +133,12 @@ export const TowerMenu: React.FC = () => {
               canAfford={canAfford}
               onClick={() => selectTower(isSelected ? null : type)}
             >
-              <div style={{ marginTop: '10px' }}>
-                <UpgradeButton
-                  cost={techUpgradeCost}
-                  onUpgrade={() => handleTechUpgrade(type)}
-                  canAfford={canAffordUpgrade}
-                  variant="orange"
-                />
-              </div>
+              <UpgradeButton
+                cost={techUpgradeCost}
+                onUpgrade={() => handleTechUpgrade(type)}
+                canAfford={canAffordUpgrade}
+                variant="orange"
+              />
             </TowerCard>
           );
         })}

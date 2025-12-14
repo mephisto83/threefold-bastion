@@ -71,7 +71,18 @@ export const TowerCard: React.FC<TowerCardProps> = ({
             </>
           )}
         </div>
-        {children}
+
+        {!isLocked && (
+          <div className="tower-select-hint" aria-hidden="true">
+            {isSelected ? 'SELECTED' : 'CLICK TO SELECT'}
+          </div>
+        )}
+
+        {children ? (
+          <div className="tower-actions" onClick={(e) => e.stopPropagation()}>
+            {children}
+          </div>
+        ) : null}
       </div>
       <div className="card-glow"></div>
     </div>

@@ -5,7 +5,16 @@ import { TIER_GATES } from '../game/config/progressionConfig';
 import { generatePaths } from '../game/utils/pathGenerator';
 import { soundManager } from '../game/utils/SoundManager';
 
-export type GameStatus = 'start' | 'playing' | 'gameover' | 'victory' | 'wave_intermission' | 'characters' | 'instructions' | 'family_tree';
+export type GameStatus =
+  | 'start'
+  | 'playing'
+  | 'gameover'
+  | 'victory'
+  | 'wave_intermission'
+  | 'characters'
+  | 'instructions'
+  | 'family_tree'
+  | 'tower_showcase';
 
 export type Language = 'en' | 'fr';
 
@@ -160,6 +169,7 @@ interface GameState {
   showCharacters: () => void;
   showInstructions: () => void;
   showFamilyTree: () => void;
+  showTowerShowcase: () => void;
   showStartScreen: () => void;
 
   startGame: () => void;
@@ -306,6 +316,7 @@ export const useGameState = create<GameState>((set, get) => ({
   showCharacters: () => set({ status: 'characters' }),
   showInstructions: () => set({ status: 'instructions' }),
   showFamilyTree: () => set({ status: 'family_tree' }),
+  showTowerShowcase: () => set({ status: 'tower_showcase' }),
   showStartScreen: () => set({ status: 'start' }),
 
   startGame: () => {
