@@ -220,7 +220,7 @@ export const TOWERS = {
         model: "/models/towers/command/command.glb", // Placeholder
         range: 15, // Buff radius
         damage: 0,
-        fireRate: .1,
+        fireRate: 5,
         cost: 400,
         color: "orange",
         modelOffset: [0, .3, 0],
@@ -235,7 +235,7 @@ export const TOWERS = {
             {
                 range: 20,
                 damage: 0,
-                fireRate: 1,
+                fireRate: 3,
                 health: 600,
                 cost: 600,
                 model: "/models/towers/command/command.glb"
