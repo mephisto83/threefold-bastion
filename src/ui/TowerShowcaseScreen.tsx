@@ -48,7 +48,6 @@ function VideoWithFallback({
       src={src}
       autoPlay
       loop
-      muted
       playsInline
       controls
       preload="metadata"
@@ -60,7 +59,14 @@ function VideoWithFallback({
         }
         setFailed(true);
       }}
-      style={{ width: '100%', height: '100%', objectFit: 'cover', background: 'black' }}
+      style={{
+        width: 'auto',
+        height: 'auto',
+        maxWidth: '100%',
+        maxHeight: '100%',
+        objectFit: 'contain',
+        background: 'black',
+      }}
     />
   );
 }
@@ -135,8 +141,8 @@ export const TowerShowcaseScreen: React.FC = () => {
   const [selected, setSelected] = useState<TowerType>(towerTypes[0]);
 
   const preferredLang = (language || 'en').toLowerCase();
-  const preferredVideo = `/video/towers/${preferredLang}/${selected}.mp4`;
-  const fallbackVideo = `/video/towers/en/${selected}.mp4`;
+  const preferredVideo = `/video/towers/${preferredLang}/${selected}/${selected}.mp4`;
+  const fallbackVideo = `/video/towers/en/${selected}/${selected}.mp4`;
 
   return (
     <div
@@ -243,7 +249,8 @@ export const TowerShowcaseScreen: React.FC = () => {
             background: 'rgba(0,0,0,0.35)',
             overflow: 'hidden',
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
+            // Most tower videos are widescreen; give the video panel a bit more room.
+            gridTemplateColumns: '0.9fr 1.1fr',
             gap: '1px',
           }}
         >
@@ -264,7 +271,15 @@ export const TowerShowcaseScreen: React.FC = () => {
             <div style={{ padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
               <div style={{ color: '#00ffff', fontWeight: 800, letterSpacing: '0.12em', fontSize: 12 }}>VIDEO</div>
             </div>
-            <div style={{ height: 'calc(100% - 45px)' }}>
+            <div
+              style={{
+                height: 'calc(100% - 45px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'black',
+              }}
+            >
               <VideoWithFallback preferredSrc={preferredVideo} fallbackSrc={fallbackVideo} />
             </div>
           </div>
