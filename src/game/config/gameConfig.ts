@@ -320,7 +320,7 @@ export const ENEMIES = {
         name: "Scarab",
         character: "adam",
         model: "/models/enemies/bugs/bug_1.glb",
-        speed: 10,
+        speed: 18,
         health: 50,
         shield: 50,
         reward: 10,
@@ -333,8 +333,8 @@ export const ENEMIES = {
         name: "Wasp",
         character: "bob",
         model: "/models/enemies/bugs/bug_2.glb",
-        speed: 6,
-        health: 350,
+        speed: 14,
+        health: 100,
         shield: 100,
         reward: 50,
         color: "blue",
@@ -346,8 +346,8 @@ export const ENEMIES = {
         name: "Beetle",
         character: "christophe",
         model: "/models/enemies/bugs/bug_3.glb",
-        speed: 8,
-        health: 550,
+        speed: 12,
+        health: 150,
         shield: 200,
         reward: 25,
         color: "darkred",
@@ -359,8 +359,8 @@ export const ENEMIES = {
         name: "Spider",
         character: "adam",
         model: "/models/enemies/bugs/bug_4.glb",
-        speed: 12,
-        health: 120,
+        speed: 10,
+        health: 200,
         shield: 30,
         reward: 15,
         color: "purple",
@@ -372,8 +372,8 @@ export const ENEMIES = {
         name: "Dragonfly",
         character: "bob",
         model: "/models/enemies/bugs/bug_5.glb",
-        speed: 14,
-        health: 180,
+        speed: 8,
+        health: 250,
         shield: 60,
         reward: 30,
         color: "cyan",
@@ -385,8 +385,8 @@ export const ENEMIES = {
         name: "Mantis",
         character: "christophe",
         model: "/models/enemies/bugs/bug_6.glb",
-        speed: 9,
-        health: 400,
+        speed: 6,
+        health: 350,
         shield: 150,
         reward: 40,
         color: "green",
@@ -418,7 +418,7 @@ export const getWaveConfig = (wave: number) => {
 
     // Scale difficulty
     // Increase count more slowly to improve performance
-    const count = Math.min(15,   5 + Math.floor(wave * 0.2)); 
+    const count = Math.min(5,   5 + Math.floor(wave * 0.2)); 
    
     const interval = Math.max(0.5, 2 - (wave * 0.05)); // Decrease interval slightly, min 0.5s
 

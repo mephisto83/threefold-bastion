@@ -1,13 +1,18 @@
 import React from 'react';
 import { useGameState } from '../state/gameState';
-import { TOWERS, TowerType } from '../game/config/gameConfig';
+import { TOWERS, TowerType, CHARACTERS } from '../game/config/gameConfig';
 import { TIER_GATES } from '../game/config/progressionConfig';
 import { useTranslation } from './hooks/useTranslation';
 import { TowerCard, UpgradeButton } from './CyberUI';
 
 export const TowerMenu: React.FC = () => {
-  const { selectTower, selectedTower, money, towerBlueprints, upgradeTowerBlueprint, spendMoney, currentTier } = useGameState();
+  const { selectTower, selectedTower, money, towerBlueprints, upgradeTowerBlueprint, spendMoney, currentTier, towers, eliminatedCharacterIds } = useGameState();
   const { t } = useTranslation();
+
+  const eliminated = new Set(eliminatedCharacterIds);
+  const aliveIds = Object.keys(CHARACTERS).filter((id) => !eliminated.has(id));
+  const assignedIds = new Set(towers.map((tw) => tw.assignedCharacter).filter(Boolean) as string[]);
+  const hasAvailableOfficer = aliveIds.some((id) => !assignedIds.has(id));
 
   const handleTechUpgrade = (type: TowerType) => {
     const config = TOWERS[type];
@@ -57,7 +62,7 @@ export const TowerMenu: React.FC = () => {
             <div style={{ color: '#aaa', fontSize: '12px', marginBottom: '5px' }}>{t('nextTierRequirements')}</div>
             {nextGate.requirements.map((req, i) => {
               const towerName = t(TOWERS[req.tower].name);
-              const currentCount = useGameState.getState().towers.filter(t => t.type === req.tower).length;
+              const currentCount = towers.filter(t => t.type === req.tower).length;
               const currentLevel = towerBlueprints[req.tower];
               
               let status = '';
@@ -105,7 +110,7 @@ export const TowerMenu: React.FC = () => {
         {(Object.keys(TOWERS) as TowerType[]).map((type) => {
           const config = TOWERS[type];
           const isSelected = selectedTower === type;
-          const canAfford = money >= config.cost;
+          const canAfford = money >= config.cost && hasAvailableOfficer;
           const level = towerBlueprints[type];
           const techUpgradeCost = Math.floor((config.upgradeCost || 100) * level * 2);
           const canAffordUpgrade = money >= techUpgradeCost;
@@ -131,7 +136,10 @@ export const TowerMenu: React.FC = () => {
               techLevel={level}
               isSelected={isSelected}
               canAfford={canAfford}
-              onClick={() => selectTower(isSelected ? null : type)}
+              onClick={() => {
+                if (!hasAvailableOfficer) return;
+                selectTower(isSelected ? null : type);
+              }}
             >
               <UpgradeButton
                 cost={techUpgradeCost}

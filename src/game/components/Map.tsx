@@ -10,7 +10,7 @@ import { Portal } from './Portal';
 import { soundManager } from '../utils/SoundManager';
 
 export const Map: React.FC = () => {
-  const { selectedTower, addTower, spendMoney, selectTower, towers, paths, selectedTowerId, updateTower, towerBlueprints, isMovingMode, setMovingMode, pendingMovePosition, setPendingMovePosition, effects, language } = useGameState();
+  const { selectedTower, addTower, spendMoney, selectTower, towers, paths, selectedTowerId, updateTower, towerBlueprints, isMovingMode, setMovingMode, pendingMovePosition, setPendingMovePosition, effects, language, eliminatedCharacterIds } = useGameState();
   const [hoverPos, setHoverPos] = useState<Vector3 | null>(null);
 
   const handlePlaneClick = (e: any) => {
@@ -29,10 +29,11 @@ export const Map: React.FC = () => {
     if (towers.some(t => t.id !== selectedTowerId && t.position.distanceTo(position) < 0.5)) return;
 
     if (selectedTower) {
-      if (towers.length >= Object.keys(CHARACTERS).length) {
-        // TODO: Show error message
-        return;
-      }
+      const eliminated = new Set(eliminatedCharacterIds);
+      const aliveIds = Object.keys(CHARACTERS).filter((id) => !eliminated.has(id));
+      const assignedIds = new Set(towers.map((t) => t.assignedCharacter).filter(Boolean) as string[]);
+      const hasAvailableOfficer = aliveIds.some((id) => !assignedIds.has(id));
+      if (!hasAvailableOfficer) return;
 
       const config = TOWERS[selectedTower];
       if (spendMoney(config.cost)) {
@@ -54,8 +55,9 @@ export const Map: React.FC = () => {
         addTower(newTower);
 
         // Play character placement sound
-        // The addTower function auto-assigns a character to the tower object
-        const characterId = newTower.assignedCharacter || config.character;
+        // The addTower function auto-assigns a character in state
+        const placedTower = useGameState.getState().towers.find((t) => t.id === newTower.id);
+        const characterId = placedTower?.assignedCharacter || config.character;
         if (characterId && CHARACTERS[characterId]) {
           const audio = CHARACTERS[characterId].audio?.[language]?.selected_acknowledged;
           if (audio) {

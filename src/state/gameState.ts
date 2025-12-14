@@ -583,7 +583,14 @@ export const useGameState = create<GameState>((set, get) => ({
       }
     }
 
-    const assignedCharacter = tower.assignedCharacter ?? pickedId;
+    const requestedCharacter = tower.assignedCharacter;
+    const assignedCharacter =
+      requestedCharacter && !eliminated.has(requestedCharacter) && !assignedIds.has(requestedCharacter)
+        ? requestedCharacter
+        : pickedId;
+
+    // No available living/unassigned officer => do not place tower.
+    if (!assignedCharacter) return;
 
     // Play video for the assigned character
     const characterId = assignedCharacter;
@@ -595,10 +602,12 @@ export const useGameState = create<GameState>((set, get) => ({
         }
     }
 
+    const shouldAdvanceCycle = assignedCharacter === pickedId;
+
     set((s) => ({
       towers: [...s.towers, { ...tower, assignedCharacter }],
       characterCycleIds: cycleIds,
-      characterCycleIndex: cycleIds.length > 0 ? nextIndex : 0,
+      characterCycleIndex: cycleIds.length > 0 ? (shouldAdvanceCycle ? nextIndex : s.characterCycleIndex) : 0,
       runStats: { ...s.runStats, towersBuilt: s.runStats.towersBuilt + 1 },
       characterRunStats: assignedCharacter
         ? {

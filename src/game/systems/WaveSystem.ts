@@ -39,9 +39,9 @@ export const WaveSystem = () => {
         const enemyConfig = ENEMIES[currentWaveConfig.type];
         // Random offset
         const offset = new Vector3(
-          (Math.random() - 0.5) * 1.875, 
-          (Math.random() - 0.5) * 1.0,
-          (Math.random() - 0.5) * 1.875
+          (Math.random() - 0.5) * 2.875, 
+          (Math.random() - 0.5) * 2.0,
+          (Math.random() - 0.5) * 2.875
         );
         
         const pathIndex = Math.floor(Math.random() * paths.length);
@@ -49,17 +49,17 @@ export const WaveSystem = () => {
 
         // Difficulty Scaling
         // Health increases by 40% per wave (Power increases more quickly)
-        let healthMultiplierFactor = 0.8;
-        if(currentWaveConfig.count === 20) {
-            healthMultiplierFactor = 1.2;
-        }
+        let healthMultiplierFactor = 2;
+        // if(currentWaveConfig.count === 20) {
+        //     healthMultiplierFactor = 1.2;
+        // }
         const healthMultiplier = 1 + (wave - 1) * healthMultiplierFactor;
         // Scale increases by 10% per wave, capped at 10.0x (Size increases with power)
-        const scaleMultiplier = Math.min(40.0, 1 + (wave - 1) * 0.1);
+        const scaleMultiplier = Math.min(80.0, 1 + (wave - 1) * 0.4);
 
         const maxHealth = Math.floor(enemyConfig.health * healthMultiplier);
         const maxShield = Math.floor((enemyConfig.shield || 0) * healthMultiplier);
-
+        const maxSpeed = Math.floor(enemyConfig.speed * (1 + (wave - 1) * 0.2)); // Speed increases by 20% per wave
         spawnEnemy({
           id: uuidv4(),
           type: currentWaveConfig.type,
@@ -71,7 +71,7 @@ export const WaveSystem = () => {
           maxHealth: maxHealth,
           shield: maxShield,
           maxShield: maxShield,
-          speed: enemyConfig.speed,
+          speed: maxSpeed,
           scale: scaleMultiplier
         });
 

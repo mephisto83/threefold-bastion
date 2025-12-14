@@ -25,7 +25,7 @@ export const HUD: React.FC = () => {
         top: 20,
         left: 20,
         color: 'white',
-        fontFamily: 'monospace',
+        fontFamily: "'Cyber Brush', sans-serif",
         fontSize: '24px',
         pointerEvents: 'none',
         textShadow: '2px 2px 0 #000'

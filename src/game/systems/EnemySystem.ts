@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 export const EnemySystem = () => {
-  const { enemies, updateEnemy, removeEnemy, takeDamage, paths, miners, towers, addProjectile, isSettingsOpen } = useGameState();
+  const { enemies, updateEnemy, removeEnemy, takeDamage, paths, towers, addProjectile, isSettingsOpen } = useGameState();
 
   // Create path curves
   const pathCurves = useMemo(() => {
@@ -46,20 +46,11 @@ export const EnemySystem = () => {
         if (config.damage && config.range) {
           const lastFired = enemy.lastFired || 0;
           if (now - lastFired >= config.fireRate) {
-            // Find target (Miner or Tower)
+            // Find target (Tower)
             let targetId: string | null = null;
             let minDist = Infinity;
 
-            // Check Miners
-            miners.forEach(miner => {
-              const dist = enemy.position.distanceTo(miner.position);
-              if (dist <= config.range && dist < minDist) {
-                minDist = dist;
-                targetId = miner.id;
-              }
-            });
-
-            // Check Towers (if no miner found or closer)
+            // Check Towers
             towers.forEach(tower => {
               const dist = enemy.position.distanceTo(tower.position);
               if (dist <= config.range && dist < minDist) {
