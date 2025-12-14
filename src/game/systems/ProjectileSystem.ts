@@ -17,8 +17,10 @@ export const ProjectileSystem = () => {
     updateMiner,
     removeMiner,
     updateTower,
+    destroyTower,
     addMoney,
     addEffect,
+    recordEnemyKill,
     isSettingsOpen,
     language
   } = useGameState();
@@ -130,6 +132,7 @@ export const ProjectileSystem = () => {
                 });
 
                 removeEnemy(target.id);
+                recordEnemyKill(projectile.sourceCharacterId || null);
                 // @ts-ignore
                 const reward = ENEMIES[target.type].reward;
                 addMoney(reward);
@@ -170,9 +173,7 @@ export const ProjectileSystem = () => {
 
                 if (targetType === 'miner') removeMiner(target.id);
                 if (targetType === 'tower') {
-                     useGameState.setState(state => ({
-                        towers: state.towers.filter(t => t.id !== target.id)
-                    }));
+                  destroyTower(target.id);
                 }
             }
         }

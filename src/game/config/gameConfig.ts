@@ -321,7 +321,7 @@ export const ENEMIES = {
         character: "adam",
         model: "/models/enemies/bugs/bug_1.glb",
         speed: 10,
-        health: 150,
+        health: 50,
         shield: 50,
         reward: 10,
         color: "red",
@@ -339,7 +339,7 @@ export const ENEMIES = {
         reward: 50,
         color: "blue",
         damage: 20,
-        range: 8,
+        range: 6,
         fireRate: 1
     },
     tank: {
@@ -364,8 +364,8 @@ export const ENEMIES = {
         shield: 30,
         reward: 15,
         color: "purple",
-        damage: 8,
-        range: 4,
+        damage: 18,
+        range: 6,
         fireRate: 2.5
     },
     dragonfly: {
@@ -377,8 +377,8 @@ export const ENEMIES = {
         shield: 60,
         reward: 30,
         color: "cyan",
-        damage: 12,
-        range: 6,
+        damage: 22,
+        range: 7,
         fireRate: 2
     },
     mantis: {
@@ -390,8 +390,8 @@ export const ENEMIES = {
         shield: 150,
         reward: 40,
         color: "green",
-        damage: 25,
-        range: 3,
+        damage: 35,
+        range: 8,
         fireRate: 1.2
     }
 } as const;

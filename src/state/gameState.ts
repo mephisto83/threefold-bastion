@@ -116,7 +116,49 @@ export interface ProjectileEntity {
   speed: number;
   startPosition: Vector3; // For lerping if needed
   faction: 'player' | 'enemy';
+  sourceTowerId?: string;
+  sourceCharacterId?: string;
 }
+
+export interface CharacterRunStats {
+  towersAssigned: number;
+  towersLost: number;
+  enemyKills: number;
+}
+
+export interface GameRunStats {
+  startedAtMs: number | null;
+  endedAtMs: number | null;
+  damageTaken: number;
+  moneyEarned: number;
+  moneySpent: number;
+  wavesStarted: number;
+  wavesCompleted: number;
+  enemiesKilled: number;
+  towersBuilt: number;
+  towersDestroyed: number;
+  officersLost: number;
+}
+
+const createEmptyRunStats = (): GameRunStats => ({
+  startedAtMs: null,
+  endedAtMs: null,
+  damageTaken: 0,
+  moneyEarned: 0,
+  moneySpent: 0,
+  wavesStarted: 0,
+  wavesCompleted: 0,
+  enemiesKilled: 0,
+  towersBuilt: 0,
+  towersDestroyed: 0,
+  officersLost: 0,
+});
+
+const createEmptyCharacterRunStats = (): CharacterRunStats => ({
+  towersAssigned: 0,
+  towersLost: 0,
+  enemyKills: 0,
+});
 
 export interface EffectEntity {
   id: string;
@@ -145,6 +187,15 @@ interface GameState {
   pendingMovePosition: Vector3 | null;
   towerBlueprints: Record<TowerType, number>;
   activeVideo: VideoState | null;
+
+  // Character rotation (prevents repeats until all are used)
+  characterCycleIds: string[];
+  characterCycleIndex: number;
+  eliminatedCharacterIds: string[];
+
+  // Run stats
+  runStats: GameRunStats;
+  characterRunStats: Record<string, CharacterRunStats>;
   
   // Settings
   isSettingsOpen: boolean;
@@ -180,6 +231,8 @@ interface GameState {
   nextWave: () => void;
   waveCompleted: () => void;
 
+  recordEnemyKill: (killerCharacterId?: string | null) => void;
+
   spawnEnemy: (enemy: EnemyEntity) => void;
   updateEnemy: (id: string, updates: Partial<EnemyEntity>) => void;
   removeEnemy: (id: string) => void;
@@ -187,6 +240,8 @@ interface GameState {
   addTower: (tower: TowerEntity) => void;
   updateTower: (id: string, updates: Partial<TowerEntity>) => void;
   removeTower: (id: string) => void;
+  // Remove tower due to combat destruction (eliminates its character from future use)
+  destroyTower: (id: string) => void;
 
   addRock: (rock: RockEntity) => void;
   updateRock: (id: string, updates: Partial<RockEntity>) => void;
@@ -238,6 +293,13 @@ export const useGameState = create<GameState>((set, get) => ({
     engineering_station: 1
   },
   activeVideo: null,
+
+  characterCycleIds: Object.keys(CHARACTERS),
+  characterCycleIndex: 0,
+  eliminatedCharacterIds: [],
+
+  runStats: createEmptyRunStats(),
+  characterRunStats: {},
 
   isSettingsOpen: false,
   isLoading: true,
@@ -320,6 +382,10 @@ export const useGameState = create<GameState>((set, get) => ({
   showStartScreen: () => set({ status: 'start' }),
 
   startGame: () => {
+    const characterIds = Object.keys(CHARACTERS);
+    const characterRunStats: Record<string, CharacterRunStats> = {};
+    for (const id of characterIds) characterRunStats[id] = createEmptyCharacterRunStats();
+
     const initialRocks: RockEntity[] = [];
     for (let i = 0; i < 8; i++) {
       // Random position between -20 and 20
@@ -366,7 +432,12 @@ export const useGameState = create<GameState>((set, get) => ({
         command_node: 1,
         engineering_station: 1
       },
-      currentTier: 1
+      currentTier: 1,
+      characterCycleIds: characterIds,
+      characterCycleIndex: 0,
+      eliminatedCharacterIds: [],
+      runStats: { ...createEmptyRunStats(), startedAtMs: Date.now() },
+      characterRunStats
     });
   },
   
@@ -402,21 +473,31 @@ export const useGameState = create<GameState>((set, get) => ({
     }
   },
 
-  endGame: (victory) => set({ status: victory ? 'victory' : 'gameover' }),
+  endGame: (victory) => set((state) => ({
+    status: victory ? 'victory' : 'gameover',
+    runStats: { ...state.runStats, endedAtMs: state.runStats.endedAtMs ?? Date.now() }
+  })),
   
   takeDamage: (amount) => {
     const newHealth = get().health - amount;
     if (newHealth <= 0) {
       get().endGame(false);
     }
+    set((state) => ({ runStats: { ...state.runStats, damageTaken: state.runStats.damageTaken + amount } }));
     set({ health: Math.max(0, newHealth) });
   },
 
-  addMoney: (amount) => set((state) => ({ money: state.money + amount })),
+  addMoney: (amount) => set((state) => ({
+    money: state.money + amount,
+    runStats: { ...state.runStats, moneyEarned: state.runStats.moneyEarned + amount }
+  })),
   spendMoney: (amount) => {
     const { money } = get();
     if (money >= amount) {
-      set({ money: money - amount });
+      set((state) => ({
+        money: money - amount,
+        runStats: { ...state.runStats, moneySpent: state.runStats.moneySpent + amount }
+      }));
       return true;
     }
     return false;
@@ -424,7 +505,8 @@ export const useGameState = create<GameState>((set, get) => ({
   nextWave: () => set((state) => ({ 
     wave: state.wave + 1, 
     paths: generatePaths(state.wave + 1),
-    status: 'playing' 
+    status: 'playing',
+    runStats: { ...state.runStats, wavesStarted: state.runStats.wavesStarted + 1 }
   })),
   
   waveCompleted: () => {
@@ -438,7 +520,10 @@ export const useGameState = create<GameState>((set, get) => ({
             soundManager.play(CHARACTERS[charId].audio[lang].kill_wave_clear, 0.6);
         }
     }
-    set({ status: 'wave_intermission' });
+    set((s) => ({
+      status: 'wave_intermission',
+      runStats: { ...s.runStats, wavesCompleted: s.runStats.wavesCompleted + 1 }
+    }));
   },
 
   spawnEnemy: (enemy) => {
@@ -476,18 +561,32 @@ export const useGameState = create<GameState>((set, get) => ({
 
   addTower: (tower) => {
     const state = get();
-    
-    // Auto-assign character
-    const allCharacterIds = Object.keys(CHARACTERS);
-    const assignedIds = new Set(state.towers.map(t => t.assignedCharacter).filter(Boolean));
-    const availableId = allCharacterIds.find(id => !assignedIds.has(id));
-    
-    if (availableId) {
-        tower.assignedCharacter = availableId;
+
+    // Auto-assign character (round-robin through remaining *unassigned* characters, no repeats until all are used)
+    const eliminated = new Set(state.eliminatedCharacterIds);
+    const cycleIds = (state.characterCycleIds.length > 0 ? state.characterCycleIds : Object.keys(CHARACTERS)).filter(
+      (id) => !eliminated.has(id)
+    );
+    const assignedIds = new Set(state.towers.map((t) => t.assignedCharacter).filter(Boolean) as string[]);
+
+    let pickedId: string | undefined;
+    let nextIndex = state.characterCycleIndex;
+    if (cycleIds.length > 0) {
+      for (let i = 0; i < cycleIds.length; i++) {
+        const idx = (state.characterCycleIndex + i) % cycleIds.length;
+        const candidate = cycleIds[idx];
+        if (!assignedIds.has(candidate)) {
+          pickedId = candidate;
+          nextIndex = (idx + 1) % cycleIds.length;
+          break;
+        }
+      }
     }
 
+    const assignedCharacter = tower.assignedCharacter ?? pickedId;
+
     // Play video for the assigned character
-    const characterId = tower.assignedCharacter || TOWERS[tower.type].character;
+    const characterId = assignedCharacter;
     if (characterId && CHARACTERS[characterId]) {
         const charConfig = CHARACTERS[characterId];
         const video = charConfig.videos.intro?.[0];
@@ -495,7 +594,22 @@ export const useGameState = create<GameState>((set, get) => ({
             state.playVideo(video, false, 2);
         }
     }
-    set((state) => ({ towers: [...state.towers, tower] }));
+
+    set((s) => ({
+      towers: [...s.towers, { ...tower, assignedCharacter }],
+      characterCycleIds: cycleIds,
+      characterCycleIndex: cycleIds.length > 0 ? nextIndex : 0,
+      runStats: { ...s.runStats, towersBuilt: s.runStats.towersBuilt + 1 },
+      characterRunStats: assignedCharacter
+        ? {
+            ...s.characterRunStats,
+            [assignedCharacter]: {
+              ...(s.characterRunStats[assignedCharacter] || createEmptyCharacterRunStats()),
+              towersAssigned: (s.characterRunStats[assignedCharacter]?.towersAssigned || 0) + 1,
+            },
+          }
+        : s.characterRunStats,
+    }));
     get().checkTierUnlock();
   },
   updateTower: (id, updates) => set((state) => ({
@@ -518,6 +632,72 @@ export const useGameState = create<GameState>((set, get) => ({
     }
     set((state) => ({
         towers: state.towers.filter((t) => t.id !== id)
+    }));
+  },
+
+  destroyTower: (id: string) => {
+    const state = get();
+    const tower = state.towers.find((t) => t.id === id);
+    if (!tower) {
+      // Ensure tower is removed even if not found
+      set((s) => ({ towers: s.towers.filter((t) => t.id !== id) }));
+      return;
+    }
+
+    const charId = tower.assignedCharacter;
+
+    // Play removed video for this character (if any)
+    if (charId && CHARACTERS[charId]) {
+      const video = CHARACTERS[charId].videos.removed?.[0];
+      if (video) {
+        state.playVideo(video, false, 2);
+      }
+    }
+
+    set((s) => {
+      const eliminated = new Set(s.eliminatedCharacterIds);
+      if (charId) eliminated.add(charId);
+
+      const newCycleIds = s.characterCycleIds.filter((id) => id !== charId);
+      const newIndex = newCycleIds.length > 0 ? Math.min(s.characterCycleIndex, newCycleIds.length - 1) : 0;
+
+      return {
+        towers: s.towers
+          .filter((t) => t.id !== id)
+          .map((t) => (charId && t.assignedCharacter === charId ? { ...t, assignedCharacter: undefined } : t)),
+        eliminatedCharacterIds: Array.from(eliminated),
+        characterCycleIds: newCycleIds,
+        characterCycleIndex: newIndex,
+        runStats: {
+          ...s.runStats,
+          towersDestroyed: s.runStats.towersDestroyed + 1,
+          officersLost: charId ? s.runStats.officersLost + 1 : s.runStats.officersLost,
+        },
+        characterRunStats: charId
+          ? {
+              ...s.characterRunStats,
+              [charId]: {
+                ...(s.characterRunStats[charId] || createEmptyCharacterRunStats()),
+                towersLost: (s.characterRunStats[charId]?.towersLost || 0) + 1,
+              },
+            }
+          : s.characterRunStats,
+      };
+    });
+  },
+
+  recordEnemyKill: (killerCharacterId) => {
+    set((s) => ({
+      runStats: { ...s.runStats, enemiesKilled: s.runStats.enemiesKilled + 1 },
+      characterRunStats: killerCharacterId
+        ? {
+            ...s.characterRunStats,
+            [killerCharacterId]: {
+              ...(s.characterRunStats[killerCharacterId] || createEmptyCharacterRunStats()),
+              enemyKills: (s.characterRunStats[killerCharacterId]?.enemyKills || 0) + 1,
+            },
+          }
+        : s.characterRunStats,
     }));
   },
 

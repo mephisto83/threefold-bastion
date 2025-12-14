@@ -4,7 +4,7 @@ import { useTranslation } from './hooks/useTranslation';
 import { CHARACTERS } from '../game/config/gameConfig';
 
 export const HUD: React.FC = () => {
-  const { money, health, wave, toggleSettings, towers } = useGameState();
+  const { money, health, wave, toggleSettings, towers, eliminatedCharacterIds } = useGameState();
   const { t } = useTranslation();
 
   // Calculate available characters
@@ -14,7 +14,9 @@ export const HUD: React.FC = () => {
       .map(t => t.assignedCharacter)
   );
   const totalCharacters = Object.keys(CHARACTERS).length;
-  const availableCount = totalCharacters - usedCharacterIds.size;
+  const eliminatedCount = eliminatedCharacterIds?.length || 0;
+  const remainingTotal = Math.max(0, totalCharacters - eliminatedCount);
+  const usedCount = usedCharacterIds.size;
 
   return (
     <>
@@ -31,7 +33,7 @@ export const HUD: React.FC = () => {
         <div>{t('money')}: ${money}</div>
         <div>{t('health')}: {health}</div>
         <div>{t('wave')}: {wave}</div>
-        <div>{t('officers')}: {totalCharacters - availableCount}/{totalCharacters}</div>
+        <div>{t('officers')}: {usedCount}/{remainingTotal}</div>
       </div>
 
       <button

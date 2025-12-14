@@ -306,7 +306,9 @@ export const TowerSystem = () => {
             damageType: config.damageType,
             speed: 10, // Projectile speed
             startPosition: tower.position.clone().add(new Vector3(0, 2, 0)),
-            faction: 'player'
+            faction: 'player',
+            sourceTowerId: tower.id,
+            sourceCharacterId: tower.assignedCharacter || config.character
           });
           
           // Consume Energy

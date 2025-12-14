@@ -5,7 +5,7 @@ import { soundManager } from '../game/utils/SoundManager';
 import { useTranslation } from './hooks/useTranslation';
 
 export const TowerDetails: React.FC = () => {
-  const { selectedTowerId, towers, updateTower, spendMoney, isMovingMode, setMovingMode, setPendingMovePosition, miners, updateMiner, language } = useGameState();
+  const { selectedTowerId, towers, updateTower, spendMoney, isMovingMode, setMovingMode, setPendingMovePosition, miners, updateMiner, language, eliminatedCharacterIds } = useGameState();
   const { t } = useTranslation();
 
   if (!selectedTowerId) return null;
@@ -16,7 +16,9 @@ export const TowerDetails: React.FC = () => {
   const config = TOWERS[tower.type];
   const level = tower.level || 1;
   
-  const assignedCharId = tower.assignedCharacter || config.character;
+  const eliminated = new Set(eliminatedCharacterIds || []);
+  const fallbackCharId = config.character && !eliminated.has(config.character) ? config.character : undefined;
+  const assignedCharId = tower.assignedCharacter || fallbackCharId;
   const assignedChar = assignedCharId ? CHARACTERS[assignedCharId] : null;
 
   // Calculate available characters
@@ -26,7 +28,8 @@ export const TowerDetails: React.FC = () => {
       .map(t => t.assignedCharacter)
   );
   const totalCharacters = Object.keys(CHARACTERS).length;
-  const availableCount = totalCharacters - usedCharacterIds.size;
+  const remainingTotal = Math.max(0, totalCharacters - (eliminatedCharacterIds?.length || 0));
+  const availableCount = Math.max(0, remainingTotal - usedCharacterIds.size);
 
   const currentStats = getTowerStats(tower.type, level, tower.assignedCharacter);
   const nextStats = getTowerStats(tower.type, level + 1, tower.assignedCharacter);
@@ -89,7 +92,7 @@ export const TowerDetails: React.FC = () => {
             {t('assignedCharacter')} ({availableCount} {t('available')}):
         </label>
         <select 
-            value={tower.assignedCharacter || config.character || ''} 
+          value={tower.assignedCharacter || fallbackCharId || ''} 
             onChange={handleCharacterChange}
             style={{
                 width: '100%',
@@ -104,9 +107,10 @@ export const TowerDetails: React.FC = () => {
             <option value="">{t('default')}</option>
             {Object.entries(CHARACTERS).map(([id, char]) => {
                 const isUsed = usedCharacterIds.has(id);
+            const isEliminated = eliminated.has(id);
                 return (
-                    <option key={id} value={id} disabled={isUsed}>
-                        {char.name} {isUsed ? `(${t('assigned')})` : ''}
+              <option key={id} value={id} disabled={isUsed || isEliminated}>
+                  {char.name} {isUsed ? `(${t('assigned')})` : ''}
                     </option>
                 );
             })}
