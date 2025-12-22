@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 export const EnemySystem = () => {
-  const { enemies, updateEnemy, removeEnemy, takeDamage, paths, towers, addProjectile, isSettingsOpen } = useGameState();
+  const { enemies, updateEnemy, removeEnemy, takeDamage, paths, towers, addProjectile, isSettingsOpen, status } = useGameState();
 
   // Create path curves
   const pathCurves = useMemo(() => {
@@ -16,7 +16,7 @@ export const EnemySystem = () => {
   }, [paths]);
 
   useFrame((state, delta) => {
-    if (isSettingsOpen) return;
+    if (isSettingsOpen || status === 'gameover' || status === 'victory') return;
 
     const now = state.clock.elapsedTime;
 

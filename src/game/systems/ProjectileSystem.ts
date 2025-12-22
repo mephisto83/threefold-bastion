@@ -22,11 +22,12 @@ export const ProjectileSystem = () => {
     addEffect,
     recordEnemyKill,
     isSettingsOpen,
-    language
+    language,
+    status
   } = useGameState();
 
   useFrame((state, delta) => {
-    if (isSettingsOpen) return;
+    if (isSettingsOpen || status === 'gameover' || status === 'victory') return;
 
     const now = state.clock.elapsedTime;
     projectiles.forEach(projectile => {

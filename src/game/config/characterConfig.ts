@@ -21,6 +21,86 @@ export interface CharacterConfig {
 }
 
 export const CHARACTERS: Record<string, CharacterConfig> = {
+    "Madelyn": {
+        "name": "Madelyn",
+        "videos": {
+            "intro": [
+                "/video/characters/Madelyn/intro/aporter_httpss.mj.runmefpoaQlPm0_Turn_toward_camera_and_smile_dfc1719f-ca4b-44bf-8937-316845bee95c_0.mp4"
+            ],
+            "selected": [
+                "/video/characters/Madelyn/selected/aporter_httpss.mj.runmefpoaQlPm0_Turn_toward_camera_and_say_y_0362f559-c43a-42f6-aba2-4df7f9c124fb_0.mp4"
+            ],
+            "removed": [
+                "/video/characters/Madelyn/removed/aporter_httpss.mj.runmefpoaQlPm0_Turn_toward_camera_and_cry.__4906ce8b-53f4-4fdf-8f2e-18f2bf4a0295_0.mp4"
+            ]
+        },
+        "stats": {
+            "rangeBonus": 2.7,
+            "damageBonus": 2.58,
+            "fireRateBonus": 1.77,
+            "healthBonus": 2.95
+        },
+        "audio": {
+            "en": {
+                "attack_firing": "/audio/characters/catch_phrases/Madelyn/en/attack_firing.mp3",
+                "commander_ai": "/audio/characters/catch_phrases/Madelyn/en/commander_ai.mp3",
+                "cyberpunk_elite_flavor": "/audio/characters/catch_phrases/Madelyn/en/cyberpunk_elite_flavor.mp3",
+                "kill_wave_clear": "/audio/characters/catch_phrases/Madelyn/en/kill_wave_clear.mp3",
+                "selected_acknowledged": "/audio/characters/catch_phrases/Madelyn/en/selected_acknowledged.mp3",
+                "under_attack_pressure": "/audio/characters/catch_phrases/Madelyn/en/under_attack_pressure.mp3",
+                "upgrade_powerup": "/audio/characters/catch_phrases/Madelyn/en/upgrade_powerup.mp3"
+            },
+            "fr": {
+                "attack_firing": "/audio/characters/catch_phrases/Madelyn/fr/attack_firing.mp3",
+                "commander_ai": "/audio/characters/catch_phrases/Madelyn/fr/commander_ai.mp3",
+                "cyberpunk_elite_flavor": "/audio/characters/catch_phrases/Madelyn/fr/cyberpunk_elite_flavor.mp3",
+                "kill_wave_clear": "/audio/characters/catch_phrases/Madelyn/fr/kill_wave_clear.mp3",
+                "selected_acknowledged": "/audio/characters/catch_phrases/Madelyn/fr/selected_acknowledged.mp3",
+                "under_attack_pressure": "/audio/characters/catch_phrases/Madelyn/fr/under_attack_pressure.mp3",
+                "upgrade_powerup": "/audio/characters/catch_phrases/Madelyn/fr/upgrade_powerup.mp3"
+            }
+        }
+    },
+    "Ryley_porter": {
+        "name": "Ryley Porter",
+        "videos": {
+            "intro": [
+                "/video/characters/Ryley_porter/intro/aporter_httpss.mj.runiQUjTgfWgHA_Turn_toward_camera_and_smile_7d8418fe-587d-428d-8419-0c3a0ed6f5d8_0.mp4"
+            ],
+            "selected": [
+                "/video/characters/Ryley_porter/selected/aporter_httpss.mj.runiQUjTgfWgHA_Turn_toward_camera_and_say_y_a3debbc8-3268-4fb7-88c9-039348e66ae7_0.mp4"
+            ],
+            "removed": [
+                "/video/characters/Ryley_porter/removed/aporter_httpss.mj.runiQUjTgfWgHA_Turn_toward_camera_and_cry.__a1553197-0052-4384-89bc-d69b792bf400_0.mp4"
+            ]
+        },
+        "stats": {
+            "rangeBonus": 4.1,
+            "damageBonus": 1.14,
+            "fireRateBonus": 0.68,
+            "healthBonus": 4.08
+        },
+        "audio": {
+            "en": {
+                "attack_firing": "/audio/characters/catch_phrases/Ryley_porter/en/attack_firing.mp3",
+                "commander_ai": "/audio/characters/catch_phrases/Ryley_porter/en/commander_ai.mp3",
+                "cyberpunk_elite_flavor": "/audio/characters/catch_phrases/Ryley_porter/en/cyberpunk_elite_flavor.mp3",
+                "kill_wave_clear": "/audio/characters/catch_phrases/Ryley_porter/en/kill_wave_clear.mp3",
+                "selected_acknowledged": "/audio/characters/catch_phrases/Ryley_porter/en/selected_acknowledged.mp3",
+                "under_attack_pressure": "/audio/characters/catch_phrases/Ryley_porter/en/under_attack_pressure.mp3",
+                "upgrade_powerup": "/audio/characters/catch_phrases/Ryley_porter/en/upgrade_powerup.mp3"
+            },
+            "fr": {
+                "attack_firing": "/audio/characters/catch_phrases/Ryley_porter/fr/attack_firing.mp3",
+                "commander_ai": "/audio/characters/catch_phrases/Ryley_porter/fr/commander_ai.mp3",
+                "cyberpunk_elite_flavor": "/audio/characters/catch_phrases/Ryley_porter/fr/cyberpunk_elite_flavor.mp3",
+                "kill_wave_clear": "/audio/characters/catch_phrases/Ryley_porter/fr/kill_wave_clear.mp3",
+                "selected_acknowledged": "/audio/characters/catch_phrases/Ryley_porter/fr/selected_acknowledged.mp3",
+                "under_attack_pressure": "/audio/characters/catch_phrases/Ryley_porter/fr/under_attack_pressure.mp3",
+                "upgrade_powerup": "/audio/characters/catch_phrases/Ryley_porter/fr/upgrade_powerup.mp3"
+            }
+        }
+    },
     "adam_ben_amor": {
         "name": "Adam Ben Amor",
         "videos": {
@@ -105,13 +185,13 @@ export const CHARACTERS: Record<string, CharacterConfig> = {
         "name": "Alexander Porter",
         "videos": {
             "intro": [
-                "/video/characters/alexander_porter/intro/aporter_httpss.mj.runmWjyOPHEP2s_Turn_toward_camera_and_smile_6fbd8161-249f-47ad-98d5-ff0d01433791_0.mp4"
+                "/video/characters/alexander_porter/intro/aporter_httpss.mj.runkYu5hyHHuVg_Turn_toward_camera_and_smile_6451ce18-ce91-4d7f-a6b5-6fa9c1b3e706_0.mp4"
             ],
             "selected": [
-                "/video/characters/alexander_porter/selected/aporter_httpss.mj.runmWjyOPHEP2s_Turn_toward_camera_and_say_y_2442db3a-393c-4f07-8584-d79edcd45cc3_0.mp4"
+                "/video/characters/alexander_porter/selected/aporter_httpss.mj.runkYu5hyHHuVg_Turn_toward_camera_and_say_y_5a749f9e-0e7e-43d1-815f-48d307179ea2_0.mp4"
             ],
             "removed": [
-                "/video/characters/alexander_porter/removed/aporter_httpss.mj.runmWjyOPHEP2s_Turn_toward_camera_and_cry.__80f7fb73-887a-49a9-bad7-348dc66a787e_0.mp4"
+                "/video/characters/alexander_porter/removed/aporter_httpss.mj.runkYu5hyHHuVg_Turn_toward_camera_and_cry.__95a103b4-5588-46a8-883a-cc54d6786470_0.mp4"
             ]
         },
         "stats": {
@@ -1781,6 +1861,46 @@ export const CHARACTERS: Record<string, CharacterConfig> = {
                 "selected_acknowledged": "/audio/characters/catch_phrases/leslie_green/fr/selected_acknowledged.mp3",
                 "under_attack_pressure": "/audio/characters/catch_phrases/leslie_green/fr/under_attack_pressure.mp3",
                 "upgrade_powerup": "/audio/characters/catch_phrases/leslie_green/fr/upgrade_powerup.mp3"
+            }
+        }
+    },
+    "lisa_copeland": {
+        "name": "Lisa Copeland",
+        "videos": {
+            "intro": [
+                "/video/characters/lisa_copeland/intro/aporter_httpss.mj.runDigpvC3ss8I_Turn_toward_camera_and_smile_c8fc9ef8-daa0-496c-84e7-e137fe95e00c_0.mp4"
+            ],
+            "selected": [
+                "/video/characters/lisa_copeland/selected/aporter_httpss.mj.runDigpvC3ss8I_Turn_toward_camera_and_say_y_00a88561-ec89-4ec0-bd2b-a1452c1721fc_0.mp4"
+            ],
+            "removed": [
+                "/video/characters/lisa_copeland/removed/aporter_httpss.mj.runDigpvC3ss8I_Turn_toward_camera_and_cry.__04e5f079-b7ce-43d4-af8a-da8ab62b8cf1_0.mp4"
+            ]
+        },
+        "stats": {
+            "rangeBonus": 0.5,
+            "damageBonus": 3.39,
+            "fireRateBonus": 2.13,
+            "healthBonus": 3.98
+        },
+        "audio": {
+            "en": {
+                "attack_firing": "/audio/characters/catch_phrases/lisa_copeland/en/attack_firing.mp3",
+                "commander_ai": "/audio/characters/catch_phrases/lisa_copeland/en/commander_ai.mp3",
+                "cyberpunk_elite_flavor": "/audio/characters/catch_phrases/lisa_copeland/en/cyberpunk_elite_flavor.mp3",
+                "kill_wave_clear": "/audio/characters/catch_phrases/lisa_copeland/en/kill_wave_clear.mp3",
+                "selected_acknowledged": "/audio/characters/catch_phrases/lisa_copeland/en/selected_acknowledged.mp3",
+                "under_attack_pressure": "/audio/characters/catch_phrases/lisa_copeland/en/under_attack_pressure.mp3",
+                "upgrade_powerup": "/audio/characters/catch_phrases/lisa_copeland/en/upgrade_powerup.mp3"
+            },
+            "fr": {
+                "attack_firing": "/audio/characters/catch_phrases/lisa_copeland/fr/attack_firing.mp3",
+                "commander_ai": "/audio/characters/catch_phrases/lisa_copeland/fr/commander_ai.mp3",
+                "cyberpunk_elite_flavor": "/audio/characters/catch_phrases/lisa_copeland/fr/cyberpunk_elite_flavor.mp3",
+                "kill_wave_clear": "/audio/characters/catch_phrases/lisa_copeland/fr/kill_wave_clear.mp3",
+                "selected_acknowledged": "/audio/characters/catch_phrases/lisa_copeland/fr/selected_acknowledged.mp3",
+                "under_attack_pressure": "/audio/characters/catch_phrases/lisa_copeland/fr/under_attack_pressure.mp3",
+                "upgrade_powerup": "/audio/characters/catch_phrases/lisa_copeland/fr/upgrade_powerup.mp3"
             }
         }
     },

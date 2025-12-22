@@ -667,6 +667,10 @@ export const useGameState = create<GameState>((set, get) => ({
       const eliminated = new Set(s.eliminatedCharacterIds);
       if (charId) eliminated.add(charId);
 
+      const totalOfficers = Object.keys(CHARACTERS).length;
+      const remainingOfficers = Math.max(0, totalOfficers - eliminated.size);
+      const shouldEndGame = remainingOfficers <= 0 && s.status !== 'gameover' && s.status !== 'victory';
+
       const newCycleIds = s.characterCycleIds.filter((id) => id !== charId);
       const newIndex = newCycleIds.length > 0 ? Math.min(s.characterCycleIndex, newCycleIds.length - 1) : 0;
 
@@ -677,10 +681,12 @@ export const useGameState = create<GameState>((set, get) => ({
         eliminatedCharacterIds: Array.from(eliminated),
         characterCycleIds: newCycleIds,
         characterCycleIndex: newIndex,
+        ...(shouldEndGame ? { status: 'gameover' as const } : {}),
         runStats: {
           ...s.runStats,
           towersDestroyed: s.runStats.towersDestroyed + 1,
           officersLost: charId ? s.runStats.officersLost + 1 : s.runStats.officersLost,
+          ...(shouldEndGame ? { endedAtMs: s.runStats.endedAtMs ?? Date.now() } : {}),
         },
         characterRunStats: charId
           ? {

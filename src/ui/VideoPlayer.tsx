@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useGameState } from '../state/gameState';
 import { CHARACTERS } from '../game/config/gameConfig';
 
 export const VideoPlayer: React.FC = () => {
   const { activeVideo, stopVideo, currentSpeaker } = useGameState();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Determine which video to show
   // Priority: activeVideo (explicitly set) > currentSpeaker (talking)
@@ -20,6 +21,7 @@ export const VideoPlayer: React.FC = () => {
       // Only update src if it changed to avoid reloading same video
       const currentSrc = videoRef.current.getAttribute('src');
       if (currentSrc !== effectiveVideo.url) {
+        setIsLoading(true);
         videoRef.current.src = effectiveVideo.url;
         videoRef.current.play().catch(e => console.error("Video play failed", e));
       }
@@ -61,12 +63,46 @@ export const VideoPlayer: React.FC = () => {
         ref={videoRef}
         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         loop={effectiveVideo.loop}
+        onLoadStart={() => setIsLoading(true)}
+        onLoadedData={() => setIsLoading(false)}
+        onCanPlay={() => setIsLoading(false)}
+        onPlaying={() => setIsLoading(false)}
+        onWaiting={() => setIsLoading(true)}
+        onStalled={() => setIsLoading(true)}
+        onError={() => setIsLoading(false)}
         onEnded={() => {
             if (!effectiveVideo.loop && activeVideo) {
                 stopVideo();
             }
         }}
       />
+
+      {isLoading && (
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(0,0,0,0.35)',
+            pointerEvents: 'none',
+          }}
+        >
+          <div
+            style={{
+              width: 34,
+              height: 34,
+              borderRadius: '50%',
+              border: '3px solid rgba(255,255,255,0.25)',
+              borderTopColor: 'rgba(0,255,255,0.9)',
+              animation: 'vbSpin 0.9s linear infinite',
+            }}
+          />
+          <style>{`@keyframes vbSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
+
       {/* Scanline effect overlay */}
       <div style={{
         position: 'absolute',

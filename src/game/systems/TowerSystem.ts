@@ -7,12 +7,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { soundManager } from '../utils/SoundManager';
 
 export const TowerSystem = () => {
-  const { towers, enemies, addProjectile, updateTower, addMiner, miners, selectTowerId, addEffect, isSettingsOpen, language } = useGameState();
+  const { towers, enemies, addProjectile, updateTower, addMiner, miners, selectTowerId, addEffect, isSettingsOpen, language, status } = useGameState();
   const dummy = useMemo(() => new Object3D(), []);
   const lastCommanderSoundTime = useRef(0);
 
   useFrame((state, delta) => {
-    if (isSettingsOpen) return;
+    if (isSettingsOpen || status === 'gameover' || status === 'victory') return;
 
     const now = state.clock.elapsedTime;
 
