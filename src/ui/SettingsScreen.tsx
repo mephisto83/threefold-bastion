@@ -3,7 +3,7 @@ import { useGameState } from '../state/gameState';
 import { useTranslation } from './hooks/useTranslation';
 
 export const SettingsScreen: React.FC = () => {
-  const { isSettingsOpen, toggleSettings, language, setLanguage } = useGameState();
+  const { isSettingsOpen, toggleSettings, language, setLanguage, exitGame } = useGameState();
   const { t } = useTranslation();
 
   if (!isSettingsOpen) return null;
@@ -81,6 +81,22 @@ export const SettingsScreen: React.FC = () => {
           }}
         >
           {t('resumeGame')}
+        </button>
+          &nbsp;&nbsp;
+        <button
+          onClick={exitGame}
+          style={{
+            padding: '12px 30px',
+            background: '#F44336',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            fontSize: '16px',
+            marginTop: '12px'
+          }}
+        >
+          {t('exitGame')}
         </button>
       </div>
     </div>

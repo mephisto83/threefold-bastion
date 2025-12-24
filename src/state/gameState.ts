@@ -222,6 +222,7 @@ interface GameState {
   showFamilyTree: () => void;
   showTowerShowcase: () => void;
   showStartScreen: () => void;
+  exitGame: () => void;
 
   startGame: () => void;
   endGame: (victory: boolean) => void;
@@ -380,6 +381,48 @@ export const useGameState = create<GameState>((set, get) => ({
   showFamilyTree: () => set({ status: 'family_tree' }),
   showTowerShowcase: () => set({ status: 'tower_showcase' }),
   showStartScreen: () => set({ status: 'start' }),
+  exitGame: () => {
+    set(() => ({
+      status: 'start',
+      money: 1500,
+      health: 20,
+      wave: 0,
+      paths: generatePaths(1),
+      enemies: [],
+      towers: [],
+      projectiles: [],
+      effects: [],
+      rocks: [],
+      miners: [],
+      engineers: [],
+      selectedTower: null,
+      selectedTowerId: null,
+      isMovingMode: false,
+      pendingMovePosition: null,
+      towerBlueprints: {
+        basic: 1,
+        sniper: 1,
+        cannon: 1,
+        miner_station: 1,
+        corsair: 1,
+        command_node: 1,
+        engineering_station: 1,
+      },
+      currentTier: 1,
+      activeVideo: null,
+      characterCycleIds: Object.keys(CHARACTERS),
+      characterCycleIndex: 0,
+      eliminatedCharacterIds: [],
+      runStats: createEmptyRunStats(),
+      characterRunStats: {},
+      currentSpeaker: null,
+      isSettingsOpen: false,
+    }));
+
+    // Stop any currently displayed video immediately.
+    // (Keeping this call ensures we don't rely on the partial set above)
+    get().stopVideo();
+  },
 
   startGame: () => {
     const characterIds = Object.keys(CHARACTERS);

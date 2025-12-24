@@ -6,6 +6,7 @@ export const VideoPlayer: React.FC = () => {
   const { activeVideo, stopVideo, currentSpeaker } = useGameState();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPaused, setIsPaused] = useState(true);
 
   // Determine which video to show
   // Priority: activeVideo (explicitly set) > currentSpeaker (talking)
@@ -22,6 +23,7 @@ export const VideoPlayer: React.FC = () => {
       const currentSrc = videoRef.current.getAttribute('src');
       if (currentSrc !== effectiveVideo.url) {
         setIsLoading(true);
+        setIsPaused(true);
         videoRef.current.src = effectiveVideo.url;
         videoRef.current.play().catch(e => console.error("Video play failed", e));
       }
@@ -61,21 +63,52 @@ export const VideoPlayer: React.FC = () => {
     }}>
       <video
         ref={videoRef}
-        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', background: 'black' }}
         loop={effectiveVideo.loop}
         onLoadStart={() => setIsLoading(true)}
         onLoadedData={() => setIsLoading(false)}
         onCanPlay={() => setIsLoading(false)}
-        onPlaying={() => setIsLoading(false)}
+        onPlaying={() => {
+          setIsLoading(false);
+          setIsPaused(false);
+        }}
         onWaiting={() => setIsLoading(true)}
         onStalled={() => setIsLoading(true)}
         onError={() => setIsLoading(false)}
+        onPause={() => setIsPaused(true)}
+        onPlay={() => setIsPaused(false)}
         onEnded={() => {
             if (!effectiveVideo.loop && activeVideo) {
                 stopVideo();
             }
         }}
       />
+
+      <button
+        type="button"
+        aria-label={isPaused ? 'Play video' : 'Pause video'}
+        onClick={(e) => {
+          e.stopPropagation();
+          togglePlay();
+        }}
+        style={{
+          position: 'absolute',
+          left: '50%',
+          bottom: 10,
+          transform: 'translateX(-50%)',
+          padding: '6px 10px',
+          fontSize: 12,
+          borderRadius: 999,
+          border: '1px solid rgba(0, 255, 255, 0.6)',
+          background: 'rgba(0, 0, 0, 0.65)',
+          color: 'white',
+          cursor: 'pointer',
+          pointerEvents: 'auto',
+          userSelect: 'none',
+        }}
+      >
+        {isPaused ? 'Play' : 'Pause'}
+      </button>
 
       {isLoading && (
         <div

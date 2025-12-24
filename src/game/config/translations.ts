@@ -12,6 +12,7 @@ export const TRANSLATIONS = {
     settings: "Settings",
     language: "Language",
     resumeGame: "Resume Game",
+    exitGame: "Exit Game",
     english: "English",
     french: "Français",
 
@@ -124,6 +125,7 @@ export const TRANSLATIONS = {
     settings: "Paramètres",
     language: "Langue",
     resumeGame: "Reprendre",
+    exitGame: "Quitter la partie",
     english: "English",
     french: "Français",
 
